@@ -1207,7 +1207,7 @@
 
               <div className="form-group">
                 <label className="form-label" htmlFor="chk-phone">Teléfono / WhatsApp <span aria-hidden="true">*</span></label>
-                <input id="chk-phone" className="form-input" type="tel" placeholder="Ej: 011 1234-5678"
+                <input id="chk-phone" className="form-input" type="tel" placeholder="Ej: 011 64900350"
                   value={form.phone} onChange={set("phone")} aria-required="true"
                   aria-invalid={!!errors.phone} aria-describedby={errors.phone?"err-phone":undefined} />
                 {errors.phone && <span id="err-phone" style={{color:"#e05c3a",fontSize:"0.78rem"}} role="alert">{errors.phone}</span>}
