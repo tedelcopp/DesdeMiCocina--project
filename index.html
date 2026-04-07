@@ -1,0 +1,1365 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Desde mi cocina — Lo casero, bien hecho 🧁</title>
+  <meta name="description" content="Desde mi cocina.ar es un emprendimiento de comida casera. Panes artesanales, galletitas, tortas y alfajores hechos con amor. Pedí por WhatsApp con envío a barrios aledaños." />
+  <!-- Open Graph -->
+  <meta property="og:title" content="Desde mi cocina — Lo casero, bien hecho" />
+  <meta property="og:description" content="Panes, galletitas, tortas y alfajores artesanales. Pedí por WhatsApp." />
+  <meta property="og:type" content="website" />
+  <meta property="og:image" content="https://images.unsplash.com/photo-1509440159596-0249088772ff?w=1200&q=80" />
+  <meta name="theme-color" content="#c8956a" />
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Nunito:wght@300;400;600;700&display=swap" rel="stylesheet" />
+  <!-- React & Babel -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.5/babel.min.js"></script>
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --cream: #fdf6ec;
+      --beige: #f5e6cf;
+      --warm: #e8d0b0;
+      --caramel: #c8956a;
+      --brown: #8b5e3c;
+      --dark: #3d2c1e;
+      --text: #4a3728;
+      --text-light: #8b7355;
+      --white: #fff;
+      --shadow: 0 4px 24px rgba(61,44,30,0.10);
+      --shadow-lg: 0 8px 40px rgba(61,44,30,0.15);
+      --radius: 16px;
+      --radius-sm: 8px;
+      --font-display: 'Playfair Display', Georgia, serif;
+      --font-body: 'Nunito', sans-serif;
+    }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: var(--font-body);
+      background: var(--cream);
+      color: var(--text);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* ===== SCROLLBAR ===== */
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: var(--beige); }
+    ::-webkit-scrollbar-thumb { background: var(--caramel); border-radius: 3px; }
+
+    /* ===== NAVBAR ===== */
+    nav {
+      position: sticky; top: 0; z-index: 100;
+      background: rgba(253,246,236,0.96);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--warm);
+      padding: 0 1.5rem;
+      height: 64px;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .nav-logo {
+      font-family: var(--font-display);
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: var(--brown);
+      letter-spacing: -0.5px;
+      text-decoration: none;
+    }
+    .nav-logo span { color: var(--caramel); }
+    .nav-links { display: flex; gap: 0.5rem; align-items: center; }
+    .nav-link {
+      background: none; border: none; cursor: pointer;
+      font-family: var(--font-body); font-size: 0.9rem; font-weight: 600;
+      color: var(--text-light); padding: 0.4rem 0.8rem; border-radius: 20px;
+      transition: all 0.2s; text-decoration: none;
+    }
+    .nav-link:hover, .nav-link.active { color: var(--brown); background: var(--beige); }
+    .cart-btn {
+      position: relative;
+      background: var(--caramel); color: var(--white);
+      border: none; cursor: pointer; padding: 0.45rem 1rem;
+      border-radius: 20px; font-family: var(--font-body);
+      font-size: 0.9rem; font-weight: 700; display: flex;
+      align-items: center; gap: 6px; transition: all 0.2s;
+    }
+    .cart-btn:hover { background: var(--brown); transform: translateY(-1px); }
+    .cart-badge {
+      position: absolute; top: -6px; right: -6px;
+      background: #e05c3a; color: #fff;
+      font-size: 0.65rem; font-weight: 700;
+      width: 18px; height: 18px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      animation: pop 0.3s ease;
+    }
+    @keyframes pop { 0%{transform:scale(0)} 70%{transform:scale(1.2)} 100%{transform:scale(1)} }
+
+    /* ===== HERO ===== */
+    .hero {
+      position: relative; overflow: hidden;
+      min-height: calc(100vh - 64px);
+      display: flex; align-items: center;
+    }
+    .hero-bg {
+      position: absolute; inset: 0;
+      background: url('https://images.unsplash.com/photo-1509440159596-0249088772ff?w=1400&q=80') center/cover no-repeat;
+    }
+    .hero-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(120deg, rgba(253,246,236,0.97) 40%, rgba(200,149,106,0.35) 100%);
+    }
+    .hero-content {
+      position: relative; z-index: 2;
+      max-width: 600px; padding: 3rem 2rem 3rem 4vw;
+    }
+    .hero-badge {
+      display: inline-block;
+      background: var(--warm); color: var(--brown);
+      font-size: 0.78rem; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase;
+      padding: 0.35rem 1rem; border-radius: 20px; margin-bottom: 1.2rem;
+    }
+    .hero-title {
+      font-family: var(--font-display);
+      font-size: clamp(2.8rem, 6vw, 4.2rem);
+      font-weight: 700; color: var(--dark); line-height: 1.1; margin-bottom: 1rem;
+    }
+    .hero-title em { color: var(--caramel); font-style: italic; }
+    .hero-sub {
+      font-size: 1.1rem; color: var(--text-light); line-height: 1.7;
+      max-width: 440px; margin-bottom: 2rem;
+    }
+    .hero-cta {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: var(--caramel); color: var(--white);
+      font-family: var(--font-body); font-size: 1rem; font-weight: 700;
+      padding: 0.85rem 1.8rem; border-radius: 50px; border: none; cursor: pointer;
+      text-decoration: none; transition: all 0.25s;
+      box-shadow: 0 4px 16px rgba(200,149,106,0.4);
+    }
+    .hero-cta:hover { background: var(--brown); transform: translateY(-2px); box-shadow: 0 6px 24px rgba(200,149,106,0.5); }
+    .hero-features {
+      display: flex; gap: 1.5rem; margin-top: 2.5rem; flex-wrap: wrap;
+    }
+    .hero-feat {
+      display: flex; align-items: center; gap: 8px;
+      font-size: 0.85rem; font-weight: 600; color: var(--text-light);
+    }
+    .hero-feat-icon {
+      width: 32px; height: 32px; border-radius: 50%;
+      background: var(--beige); display: flex; align-items: center; justify-content: center;
+      font-size: 1rem;
+    }
+    .hero-scroll-photos {
+      position: absolute; right: 2rem; bottom: 2rem;
+      display: flex; gap: 0.75rem; z-index: 2;
+    }
+    .hero-mini-img {
+      width: 80px; height: 80px; border-radius: 12px;
+      object-fit: cover; border: 3px solid var(--white);
+      box-shadow: var(--shadow); transition: transform 0.3s;
+    }
+    .hero-mini-img:hover { transform: scale(1.05); }
+    @media(max-width:768px) {
+      .hero-scroll-photos { display: none; }
+      .hero-content { padding: 2rem 1.5rem; }
+    }
+
+    /* ===== SECTION SHARED ===== */
+    section { padding: 5rem 1.5rem; max-width: 1200px; margin: 0 auto; }
+    .section-label {
+      font-size: 0.78rem; font-weight: 700; letter-spacing: 2px; text-transform: uppercase;
+      color: var(--caramel); margin-bottom: 0.6rem;
+    }
+    .section-title {
+      font-family: var(--font-display);
+      font-size: clamp(1.8rem, 4vw, 2.6rem);
+      color: var(--dark); margin-bottom: 0.75rem;
+    }
+    .section-sub { font-size: 1rem; color: var(--text-light); max-width: 500px; line-height: 1.7; }
+    .divider {
+      width: 48px; height: 3px; background: var(--caramel); border-radius: 2px; margin: 1rem 0 2.5rem;
+    }
+
+    /* ===== PRODUCTS ===== */
+    .products-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 1.5rem; margin-top: 1rem;
+    }
+    .product-card {
+      background: var(--white); border-radius: var(--radius);
+      box-shadow: var(--shadow); overflow: hidden;
+      transition: transform 0.3s, box-shadow 0.3s; cursor: default;
+      position: relative;
+    }
+    .product-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-lg); }
+    .product-img-wrap { position: relative; overflow: hidden; height: 200px; }
+    .product-img {
+      width: 100%; height: 100%; object-fit: cover;
+      transition: transform 0.4s;
+    }
+    .product-card:hover .product-img { transform: scale(1.06); }
+    .product-tag {
+      position: absolute; top: 12px; left: 12px;
+      background: var(--white); color: var(--brown);
+      font-size: 0.7rem; font-weight: 700; letter-spacing: 0.5px;
+      padding: 0.25rem 0.7rem; border-radius: 20px;
+    }
+    .product-body { padding: 1.2rem 1.3rem 1.4rem; }
+    .product-name {
+      font-family: var(--font-display);
+      font-size: 1.15rem; font-weight: 700; color: var(--dark); margin-bottom: 0.4rem;
+    }
+    .product-desc { font-size: 0.85rem; color: var(--text-light); line-height: 1.6; margin-bottom: 1rem; }
+    .product-footer { display: flex; align-items: center; justify-content: space-between; }
+    .product-price {
+      font-family: var(--font-display); font-size: 1.4rem;
+      font-weight: 700; color: var(--caramel);
+    }
+    .add-btn {
+      background: var(--caramel); color: var(--white);
+      border: none; cursor: pointer; border-radius: 50px;
+      font-family: var(--font-body); font-size: 0.85rem; font-weight: 700;
+      padding: 0.45rem 1rem; display: flex; align-items: center; gap: 5px;
+      transition: all 0.2s;
+    }
+    .add-btn:hover { background: var(--brown); transform: scale(1.04); }
+    .add-btn:active { transform: scale(0.97); }
+    .added-indicator {
+      position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
+      background: rgba(200,149,106,0.15); border-radius: var(--radius);
+      animation: fadeIn 0.3s ease;
+      pointer-events: none;
+    }
+    .added-checkmark {
+      background: var(--caramel); color: #fff;
+      width: 56px; height: 56px; border-radius: 50%;
+      font-size: 1.6rem; display: flex; align-items: center; justify-content: center;
+      animation: pop 0.4s ease;
+    }
+    @keyframes fadeIn { from{opacity:0} to{opacity:1} }
+
+    /* ===== TOAST ===== */
+    .toast-container {
+      position: fixed; bottom: 1.5rem; right: 1.5rem;
+      z-index: 9999; display: flex; flex-direction: column; gap: 0.5rem;
+      pointer-events: none;
+    }
+    .toast {
+      background: var(--dark); color: var(--white);
+      padding: 0.7rem 1.2rem; border-radius: 12px;
+      font-size: 0.88rem; font-weight: 600;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+      display: flex; align-items: center; gap: 8px;
+      animation: slideUp 0.35s ease, fadeOut 0.35s ease 2.5s forwards;
+    }
+    @keyframes slideUp { from{transform:translateY(20px);opacity:0} to{transform:translateY(0);opacity:1} }
+    @keyframes fadeOut { to{opacity:0;transform:translateY(-8px)} }
+
+    /* ===== CART DRAWER ===== */
+    .cart-overlay {
+      position: fixed; inset: 0; background: rgba(61,44,30,0.45);
+      z-index: 200; animation: fadeIn 0.25s ease;
+    }
+    .cart-drawer {
+      position: fixed; right: 0; top: 0; bottom: 0;
+      width: min(420px, 100vw);
+      background: var(--cream); z-index: 201;
+      display: flex; flex-direction: column;
+      box-shadow: -8px 0 40px rgba(61,44,30,0.15);
+      animation: slideIn 0.3s ease;
+    }
+    @keyframes slideIn { from{transform:translateX(100%)} to{transform:translateX(0)} }
+    .cart-header {
+      padding: 1.2rem 1.4rem;
+      border-bottom: 1px solid var(--warm);
+      display: flex; align-items: center; justify-content: space-between;
+      background: var(--beige);
+    }
+    .cart-header-title {
+      font-family: var(--font-display); font-size: 1.3rem; font-weight: 700; color: var(--dark);
+    }
+    .close-btn {
+      background: var(--warm); border: none; cursor: pointer;
+      width: 32px; height: 32px; border-radius: 50%;
+      font-size: 1.1rem; color: var(--brown); display: flex;
+      align-items: center; justify-content: center; transition: all 0.2s;
+    }
+    .close-btn:hover { background: var(--warm); color: var(--dark); transform: rotate(90deg); }
+    .cart-items { flex: 1; overflow-y: auto; padding: 1rem 1.4rem; }
+    .cart-item {
+      display: flex; gap: 12px; align-items: center;
+      padding: 0.9rem 0; border-bottom: 1px solid var(--warm);
+    }
+    .cart-item-img {
+      width: 60px; height: 60px; border-radius: 10px; object-fit: cover; flex-shrink: 0;
+    }
+    .cart-item-info { flex: 1; min-width: 0; }
+    .cart-item-name {
+      font-weight: 700; font-size: 0.9rem; color: var(--dark); margin-bottom: 2px;
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    }
+    .cart-item-price { font-size: 0.85rem; color: var(--caramel); font-weight: 700; }
+    .qty-control {
+      display: flex; align-items: center; gap: 6px;
+    }
+    .qty-btn {
+      background: var(--warm); border: none; cursor: pointer;
+      width: 26px; height: 26px; border-radius: 50%;
+      font-size: 0.9rem; font-weight: 700; color: var(--brown);
+      display: flex; align-items: center; justify-content: center;
+      transition: all 0.15s;
+    }
+    .qty-btn:hover { background: var(--caramel); color: #fff; }
+    .qty-num { font-weight: 700; font-size: 0.95rem; min-width: 20px; text-align: center; }
+    .remove-btn {
+      background: none; border: none; cursor: pointer;
+      color: #c9655a; font-size: 1rem; padding: 4px; border-radius: 6px;
+      transition: all 0.15s;
+    }
+    .remove-btn:hover { background: #fce8e6; transform: scale(1.1); }
+    .cart-empty {
+      text-align: center; padding: 3rem 1rem;
+    }
+    .cart-empty-icon { font-size: 3.5rem; margin-bottom: 0.8rem; }
+    .cart-empty-text { color: var(--text-light); font-size: 1rem; }
+    .cart-footer {
+      padding: 1.2rem 1.4rem;
+      border-top: 1px solid var(--warm);
+      background: var(--beige);
+    }
+    .cart-total-row {
+      display: flex; justify-content: space-between; align-items: center;
+      margin-bottom: 1rem;
+    }
+    .cart-total-label { font-size: 0.9rem; color: var(--text-light); font-weight: 600; }
+    .cart-total-amount {
+      font-family: var(--font-display); font-size: 1.5rem;
+      font-weight: 700; color: var(--dark);
+    }
+    .checkout-btn {
+      width: 100%; background: var(--caramel); color: #fff;
+      border: none; cursor: pointer; padding: 0.9rem;
+      border-radius: 12px; font-family: var(--font-body);
+      font-size: 1rem; font-weight: 700; transition: all 0.2s;
+      display: flex; align-items: center; justify-content: center; gap: 8px;
+    }
+    .checkout-btn:hover { background: var(--brown); transform: translateY(-1px); }
+    .checkout-btn:disabled { opacity: 0.5; cursor: default; transform: none; }
+
+    /* ===== CHECKOUT MODAL ===== */
+    .modal-overlay {
+      position: fixed; inset: 0; background: rgba(61,44,30,0.55);
+      z-index: 300; display: flex; align-items: center; justify-content: center;
+      padding: 1rem; animation: fadeIn 0.25s ease;
+    }
+    .modal {
+      background: var(--white); border-radius: 20px;
+      width: 100%; max-width: 480px; max-height: 90vh; overflow-y: auto;
+      box-shadow: 0 16px 60px rgba(61,44,30,0.2);
+      animation: popIn 0.3s ease;
+    }
+    @keyframes popIn { from{transform:scale(0.92);opacity:0} to{transform:scale(1);opacity:1} }
+    .modal-header {
+      padding: 1.4rem 1.6rem 1rem;
+      border-bottom: 1px solid var(--warm);
+      display: flex; align-items: center; justify-content: space-between;
+      position: sticky; top: 0; background: var(--white); z-index: 1;
+    }
+    .modal-title {
+      font-family: var(--font-display); font-size: 1.3rem; font-weight: 700; color: var(--dark);
+    }
+    .modal-body { padding: 1.4rem 1.6rem; }
+    .form-group { margin-bottom: 1.2rem; }
+    .form-label {
+      display: block; font-size: 0.82rem; font-weight: 700;
+      color: var(--text-light); text-transform: uppercase; letter-spacing: 0.5px;
+      margin-bottom: 0.4rem;
+    }
+    .form-label span { color: #e05c3a; }
+    .form-input, .form-textarea {
+      width: 100%; padding: 0.7rem 0.9rem;
+      border: 1.5px solid var(--warm); border-radius: var(--radius-sm);
+      font-family: var(--font-body); font-size: 0.95rem; color: var(--dark);
+      background: var(--cream); transition: border-color 0.2s;
+      outline: none;
+    }
+    .form-input:focus, .form-textarea:focus { border-color: var(--caramel); background: var(--white); }
+    .form-textarea { resize: vertical; min-height: 80px; }
+    .delivery-options { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; }
+    .delivery-option {
+      border: 2px solid var(--warm); border-radius: 10px;
+      padding: 0.9rem; cursor: pointer; transition: all 0.2s;
+      text-align: center; display: flex; flex-direction: column; align-items: center; gap: 6px;
+    }
+    .delivery-option:hover { border-color: var(--caramel); }
+    .delivery-option.selected { border-color: var(--caramel); background: rgba(200,149,106,0.08); }
+    .delivery-option-icon { font-size: 1.6rem; }
+    .delivery-option-label { font-size: 0.85rem; font-weight: 700; color: var(--dark); }
+    .delivery-option-desc { font-size: 0.75rem; color: var(--text-light); }
+    .order-summary {
+      background: var(--cream); border-radius: 10px; padding: 1rem;
+      margin-bottom: 1.2rem;
+    }
+    .order-summary-title {
+      font-size: 0.8rem; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.5px; color: var(--text-light); margin-bottom: 0.7rem;
+    }
+    .order-sum-row {
+      display: flex; justify-content: space-between;
+      font-size: 0.88rem; padding: 0.3rem 0; color: var(--text);
+    }
+    .order-sum-total {
+      border-top: 1px solid var(--warm); margin-top: 0.5rem; padding-top: 0.5rem;
+      font-weight: 700; font-size: 1rem; color: var(--dark);
+    }
+    .whatsapp-btn {
+      width: 100%; background: #25d366; color: #fff;
+      border: none; cursor: pointer; padding: 1rem;
+      border-radius: 12px; font-family: var(--font-body);
+      font-size: 1.05rem; font-weight: 700;
+      display: flex; align-items: center; justify-content: center; gap: 10px;
+      transition: all 0.2s; box-shadow: 0 4px 16px rgba(37,211,102,0.35);
+    }
+    .whatsapp-btn:hover { background: #1ebe5d; transform: translateY(-2px); box-shadow: 0 6px 24px rgba(37,211,102,0.45); }
+    .whatsapp-btn:disabled { opacity: 0.5; cursor: default; transform: none; }
+    .whatsapp-icon {
+      width: 22px; height: 22px;
+    }
+    .required-note { font-size: 0.78rem; color: var(--text-light); margin-top: 0.5rem; }
+
+    /* ===== ABOUT / STORY SECTION ===== */
+    .story-grid {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center;
+    }
+    .story-imgs {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; position: relative;
+    }
+    .story-img {
+      width: 100%; aspect-ratio: 1; object-fit: cover; border-radius: 16px;
+      box-shadow: var(--shadow);
+    }
+    .story-img.offset { margin-top: 2rem; }
+    .story-badge {
+      position: absolute; bottom: -16px; right: -16px;
+      background: var(--caramel); color: #fff;
+      border-radius: 50%; width: 90px; height: 90px;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      font-family: var(--font-display); font-size: 0.8rem;
+      text-align: center; font-weight: 700; line-height: 1.2;
+      box-shadow: 0 4px 20px rgba(200,149,106,0.4);
+    }
+    .story-values { display: flex; gap: 1.5rem; margin-top: 2rem; flex-wrap: wrap; }
+    .story-val {
+      display: flex; align-items: flex-start; gap: 10px;
+    }
+    .story-val-icon {
+      font-size: 1.3rem; flex-shrink: 0; margin-top: 2px;
+    }
+    .story-val-text strong { display: block; font-size: 0.9rem; color: var(--dark); margin-bottom: 2px; }
+    .story-val-text span { font-size: 0.82rem; color: var(--text-light); }
+    @media(max-width:768px) {
+      .story-grid { grid-template-columns: 1fr; gap: 2.5rem; }
+      .story-imgs { max-width: 340px; margin: 0 auto; }
+    }
+
+    /* ===== FOOTER ===== */
+    footer {
+      background: var(--dark); color: rgba(255,255,255,0.75);
+      padding: 3rem 1.5rem;
+      text-align: center;
+    }
+    .footer-logo {
+      font-family: var(--font-display); font-size: 2rem;
+      color: var(--caramel); margin-bottom: 0.5rem;
+    }
+    .footer-tagline {
+      font-size: 0.9rem; margin-bottom: 1.5rem; color: rgba(255,255,255,0.55);
+    }
+    .footer-links { display: flex; justify-content: center; gap: 1rem; flex-wrap: wrap; margin-bottom: 1.5rem; }
+    .footer-link {
+      color: rgba(255,255,255,0.65); font-size: 0.85rem; font-weight: 600;
+      cursor: pointer; background: none; border: none; transition: color 0.2s;
+    }
+    .footer-link:hover { color: var(--caramel); }
+    .footer-copy { font-size: 0.78rem; color: rgba(255,255,255,0.35); }
+
+    /* ===== GALLERY SLIDER ===== */
+    .gallery-section {
+      padding: 0; max-width: none; margin: 0;
+      background: var(--dark); overflow: hidden; position: relative;
+    }
+    .gallery-track-outer { overflow: hidden; position: relative; }
+    .gallery-track {
+      display: flex; transition: transform 0.7s cubic-bezier(0.77,0,0.18,1); will-change: transform;
+    }
+    .gallery-slide { flex-shrink: 0; width: 100%; position: relative; }
+    .gallery-slide img { width: 100%; height: 520px; object-fit: cover; display: block; }
+    .gallery-slide-caption {
+      position: absolute; bottom: 0; left: 0; right: 0;
+      background: linear-gradient(transparent, rgba(30,18,8,0.75));
+      padding: 2.5rem 2rem 1.5rem; color: #fff;
+    }
+    .gallery-slide-caption h3 {
+      font-family: var(--font-display); font-size: 1.4rem; font-weight: 700; color: #fff; margin-bottom: 0.3rem;
+    }
+    .gallery-slide-caption p { font-size: 0.88rem; color: rgba(255,255,255,0.75); }
+    .gallery-btn {
+      position: absolute; top: 50%; transform: translateY(-50%);
+      background: rgba(253,246,236,0.9); border: none; cursor: pointer;
+      width: 48px; height: 48px; border-radius: 50%;
+      font-size: 1.1rem; color: var(--brown); z-index: 10;
+      display: flex; align-items: center; justify-content: center;
+      transition: all 0.2s; box-shadow: 0 2px 12px rgba(0,0,0,0.2);
+    }
+    .gallery-btn:hover { background: #fff; transform: translateY(-50%) scale(1.08); }
+    .gallery-btn.prev { left: 1rem; } .gallery-btn.next { right: 1rem; }
+    .gallery-dots { display: flex; justify-content: center; gap: 6px; padding: 1rem 0; background: var(--dark); }
+    .gallery-dot {
+      width: 8px; height: 8px; border-radius: 50%;
+      background: rgba(255,255,255,0.3); border: none; cursor: pointer; transition: all 0.3s; padding: 0;
+    }
+    .gallery-dot.active { background: var(--caramel); width: 24px; border-radius: 4px; }
+    .gallery-header { padding: 3rem 2rem 1.5rem; background: var(--dark); text-align: center; }
+    .gallery-header .section-label { color: var(--caramel); }
+    .gallery-header .section-title { color: #fff; }
+    .gallery-header .section-sub { color: rgba(255,255,255,0.6); margin: 0 auto; }
+    @media(max-width:640px) { .gallery-slide img { height: 260px; } .gallery-slide-caption h3 { font-size: 1.1rem; } }
+
+    /* ===== PRODUCT POPUP ===== */
+    .product-card:hover .card-eye-hint { opacity: 1 !important; }
+    .product-card { cursor: pointer; }
+    .popup-overlay {
+      position: fixed; inset: 0; background: rgba(30,18,8,0.65);
+      z-index: 400; display: flex; align-items: center; justify-content: center;
+      padding: 1rem; animation: fadeIn 0.25s ease;
+    }
+    .popup-modal {
+      background: var(--white); border-radius: 20px;
+      width: 100%; max-width: 720px; max-height: 90vh; overflow-y: auto;
+      box-shadow: 0 20px 70px rgba(30,18,8,0.3); animation: popIn 0.3s ease;
+    }
+    .popup-gallery { position: relative; overflow: hidden; border-radius: 20px 20px 0 0; }
+    .popup-gallery-track { display: flex; transition: transform 0.5s cubic-bezier(0.77,0,0.18,1); }
+    .popup-gallery-slide { flex-shrink: 0; width: 100%; }
+    .popup-gallery-slide img { width: 100%; height: 340px; object-fit: cover; display: block; }
+    .popup-gallery-btn {
+      position: absolute; top: 50%; transform: translateY(-50%);
+      background: rgba(255,255,255,0.88); border: none; cursor: pointer;
+      width: 40px; height: 40px; border-radius: 50%; font-size: 1rem; color: var(--brown);
+      display: flex; align-items: center; justify-content: center;
+      transition: all 0.2s; box-shadow: 0 2px 10px rgba(0,0,0,0.15);
+    }
+    .popup-gallery-btn:hover { background: #fff; transform: translateY(-50%) scale(1.1); }
+    .popup-gallery-btn.prev { left: 0.75rem; } .popup-gallery-btn.next { right: 0.75rem; }
+    .popup-dots { position: absolute; bottom: 0.75rem; left: 0; right: 0; display: flex; justify-content: center; gap: 6px; }
+    .popup-dot {
+      width: 8px; height: 8px; border-radius: 50%;
+      background: rgba(255,255,255,0.5); border: 1.5px solid rgba(255,255,255,0.8);
+      cursor: pointer; transition: all 0.25s; padding: 0;
+    }
+    .popup-dot.active { background: #fff; transform: scale(1.2); }
+    .popup-thumb-strip {
+      display: flex; gap: 8px; padding: 0.75rem 1.2rem;
+      background: var(--beige); border-bottom: 1px solid var(--warm); overflow-x: auto;
+    }
+    .popup-thumb {
+      width: 64px; height: 64px; border-radius: 8px; object-fit: cover;
+      cursor: pointer; border: 2.5px solid transparent; flex-shrink: 0; transition: all 0.2s;
+    }
+    .popup-thumb.active { border-color: var(--caramel); transform: scale(1.05); }
+    .popup-body { padding: 1.4rem 1.6rem 1.6rem; }
+    .popup-header-row {
+      display: flex; align-items: flex-start; justify-content: space-between; gap: 1rem; margin-bottom: 0.8rem;
+    }
+    .popup-name { font-family: var(--font-display); font-size: 1.5rem; font-weight: 700; color: var(--dark); }
+    .popup-price { font-family: var(--font-display); font-size: 1.6rem; font-weight: 700; color: var(--caramel); white-space: nowrap; }
+    .popup-cat-badge {
+      display: inline-block; background: var(--warm); color: var(--brown);
+      font-size: 0.72rem; font-weight: 700; letter-spacing: 0.5px;
+      padding: 0.25rem 0.8rem; border-radius: 20px; margin-bottom: 0.8rem;
+    }
+    .popup-desc { font-size: 0.95rem; color: var(--text); line-height: 1.75; margin-bottom: 1.4rem; }
+    .popup-actions { display: flex; gap: 0.75rem; align-items: center; flex-wrap: wrap; }
+    .popup-add-btn {
+      flex: 1; min-width: 160px; background: var(--caramel); color: var(--white);
+      border: none; cursor: pointer; padding: 0.85rem 1.5rem;
+      border-radius: 50px; font-family: var(--font-body); font-size: 0.95rem; font-weight: 700;
+      display: flex; align-items: center; justify-content: center; gap: 6px; transition: all 0.2s;
+    }
+    .popup-add-btn:hover { background: var(--brown); transform: translateY(-2px); }
+    .popup-close-btn {
+      background: var(--beige); border: 1px solid var(--warm); cursor: pointer;
+      padding: 0.85rem 1.2rem; border-radius: 50px;
+      font-family: var(--font-body); font-size: 0.9rem; font-weight: 600;
+      color: var(--text-light); transition: all 0.2s;
+    }
+    .popup-close-btn:hover { background: var(--warm); color: var(--dark); }
+    .popup-close-top {
+      position: absolute; top: 0.8rem; right: 0.8rem; z-index: 10;
+      background: rgba(255,255,255,0.9); border: none; cursor: pointer;
+      width: 36px; height: 36px; border-radius: 50%; font-size: 1rem; color: var(--brown);
+      display: flex; align-items: center; justify-content: center;
+      transition: all 0.2s; box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+    }
+    .popup-close-top:hover { background: #fff; transform: rotate(90deg); }
+    @media(max-width:640px) {
+      .popup-gallery-slide img { height: 220px; }
+      .popup-name { font-size: 1.2rem; }
+      .popup-body { padding: 1rem 1.1rem 1.2rem; }
+    }
+
+    /* ===== UTILS ===== */
+    .sr-only {
+      position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+      overflow: hidden; clip: rect(0,0,0,0); border: 0;
+    }
+    @media(max-width:640px) {
+      section { padding: 3rem 1rem; }
+    }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+
+  <script type="text/babel">
+    const { useState, useEffect, useCallback, createContext, useContext, useRef, memo } = React;
+
+    // ===== TYPES & DATA =====
+    const GALLERY_BASE = "assets/public/gallery/";
+
+    const PRODUCTS = [
+      {
+        id: 1, name: "Pan de campo artesanal", category: "Panes",
+        desc: "Masas madre con fermentación lenta, corteza crujiente y miga suave. Horneado al horno de barro. Ingredientes 100% naturales, sin aditivos.",
+        price: 1800,
+        img: "https://images.unsplash.com/photo-1509440159596-0249088772ff?w=600&q=80",
+        extraImgs: [GALLERY_BASE+"prod_01_extra1.jpg", GALLERY_BASE+"prod_01_extra2.jpg"],
+      },
+      {
+        id: 2, name: "Alfajores de chocolate", category: "Alfajores",
+        desc: "Dos tapas de manteca, rellenos con dulce de leche casero y bañados en chocolate negro. Unidad o caja de 6.",
+        price: 350,
+        img: "https://images.unsplash.com/photo-1558961363-fa8fdf82db35?w=600&q=80",
+        extraImgs: [GALLERY_BASE+"prod_02_extra1.jpg", GALLERY_BASE+"prod_02_extra2.jpg"],
+      },
+      {
+        id: 3, name: "Galletitas de avena y miel", category: "Galletitas",
+        desc: "Con avena arrollada, miel de campo, nueces y toque de canela. Sin conservantes. Bolsa de 300g.",
+        price: 950,
+        img: "https://images.unsplash.com/photo-1499636136210-6f4ee915583e?w=600&q=80",
+        extraImgs: [GALLERY_BASE+"prod_03_extra1.jpg", GALLERY_BASE+"prod_03_extra2.jpg"],
+      },
+      {
+        id: 4, name: "Budín de limón y amapola", category: "Tortas",
+        desc: "Esponjoso, húmedo, con glaseado cítrico. Receta familiar transmitida de generación en generación. 8 porciones.",
+        price: 2200,
+        img: "https://images.unsplash.com/photo-1565958011703-44f9829ba187?w=600&q=80",
+        extraImgs: [GALLERY_BASE+"prod_04_extra1.jpg", GALLERY_BASE+"prod_04_extra2.jpg"],
+      },
+      {
+        id: 5, name: "Pan de miga integral", category: "Panes",
+        desc: "Harina integral de molino local, semillas de girasol, lino y chía. Ideal para el desayuno. Aproximadamente 700g.",
+        price: 1600,
+        img: "https://images.unsplash.com/photo-1586444248902-2f64eddc13df?w=600&q=80",
+        extraImgs: [GALLERY_BASE+"prod_05_extra1.jpg", GALLERY_BASE+"prod_05_extra2.jpg"],
+      },
+      {
+        id: 6, name: "Torta de zanahoria y nuez", category: "Tortas",
+        desc: "Húmeda, especiada con canela y nuez moscada, con frosting de queso crema casero. 10 porciones generosas.",
+        price: 2800,
+        img: "https://images.unsplash.com/photo-1621303837174-89787a7d4729?w=600&q=80",
+        extraImgs: [GALLERY_BASE+"prod_06_extra1.jpg", GALLERY_BASE+"prod_06_extra2.jpg"],
+      },
+      {
+        id: 7, name: "Caja de galletitas variadas", category: "Galletitas",
+        desc: "Surtido de 18 galletitas: manteca, vainilla, coco y chocolate. Presentación en cajita kraft. Regalo ideal.",
+        price: 1500,
+        img: "https://images.unsplash.com/photo-1481391319762-47dff72954d9?w=600&q=80",
+        extraImgs: [GALLERY_BASE+"prod_07_extra1.jpg", GALLERY_BASE+"prod_07_extra2.jpg"],
+      },
+      {
+        id: 8, name: "Alfajores de maicena x3", category: "Alfajores",
+        desc: "Clásicos mendocinos: masa de maicena que se deshace, dulce de leche artesanal y coco rallado. Pack de 3 unidades.",
+        price: 900,
+        img: "https://images.unsplash.com/photo-1517427294546-5aa121f68e8a?w=600&q=80",
+        extraImgs: [GALLERY_BASE+"prod_08_extra1.jpg", GALLERY_BASE+"prod_08_extra2.jpg"],
+      },
+    ];
+
+    const GALLERY_SLIDES = [
+      { img: GALLERY_BASE+"gallery_01_panes.jpg",    title: "Panes artesanales",         desc: "Fermentación lenta, ingredientes locales, horneados con amor." },
+      { img: GALLERY_BASE+"gallery_02_alfajores.jpg", title: "Alfajores de chocolate",    desc: "Dulce de leche casero y cobertura de chocolate negro." },
+      { img: GALLERY_BASE+"gallery_03_galletitas.jpg",title: "Galletitas caseras",        desc: "Sin conservantes, hechas con avena y miel de campo." },
+      { img: GALLERY_BASE+"gallery_04_tortas.jpg",   title: "Tortas & budines",           desc: "Recetas familiares con los mejores ingredientes." },
+      { img: GALLERY_BASE+"gallery_05_surtido.jpg",  title: "Surtido Desde mi cocina",             desc: "Hecho en casa, entregado con cariño." },
+      { img: GALLERY_BASE+"gallery_06_especias.jpg", title: "Especiado & aromático",      desc: "Canela, nuez moscada y amor en cada bocado." },
+      { img: GALLERY_BASE+"gallery_07_integral.jpg", title: "Pan integral con semillas",  desc: "Girasol, lino y chía para un desayuno nutritivo." },
+      { img: GALLERY_BASE+"gallery_08_pedido.jpg",   title: "Pedí por WhatsApp",          desc: "Fácil, rápido y con envío a tu barrio." },
+    ];
+
+    const WHATSAPP_NUMBER = "5491112345678"; // Replace with real number
+
+    // ===== CART CONTEXT =====
+    const CartCtx = createContext(null);
+
+    function useCart() { return useContext(CartCtx); }
+
+    function CartProvider({ children }) {
+      const [items, setItems] = useState(() => {
+        try {
+          const saved = localStorage.getItem("grachu_cart");
+          return saved ? JSON.parse(saved) : [];
+        } catch { return []; }
+      });
+      const [toasts, setToasts] = useState([]);
+
+      useEffect(() => {
+        try { localStorage.setItem("grachu_cart", JSON.stringify(items)); } catch {}
+      }, [items]);
+
+      const addToast = useCallback((msg) => {
+        const id = Date.now();
+        setToasts(t => [...t, { id, msg }]);
+        setTimeout(() => setToasts(t => t.filter(x => x.id !== id)), 3000);
+      }, []);
+
+      const addItem = useCallback((product) => {
+        setItems(prev => {
+          const exists = prev.find(i => i.id === product.id);
+          if (exists) return prev.map(i => i.id === product.id ? { ...i, qty: i.qty + 1 } : i);
+          return [...prev, { ...product, qty: 1 }];
+        });
+        addToast(`✓ ${product.name} agregado`);
+      }, [addToast]);
+
+      const updateQty = useCallback((id, delta) => {
+        setItems(prev => prev
+          .map(i => i.id === id ? { ...i, qty: i.qty + delta } : i)
+          .filter(i => i.qty > 0)
+        );
+      }, []);
+
+      const removeItem = useCallback((id) => {
+        setItems(prev => prev.filter(i => i.id !== id));
+      }, []);
+
+      const clearCart = useCallback(() => setItems([]), []);
+
+      const total = items.reduce((s, i) => s + i.price * i.qty, 0);
+      const count = items.reduce((s, i) => s + i.qty, 0);
+
+      return (
+        <CartCtx.Provider value={{ items, addItem, updateQty, removeItem, clearCart, total, count, toasts }}>
+          {children}
+        </CartCtx.Provider>
+      );
+    }
+
+    // ===== GALLERY SLIDER =====
+    const GallerySlider = memo(() => {
+      const [current, setCurrent] = useState(0);
+      const total = GALLERY_SLIDES.length;
+      const timerRef = useRef(null);
+
+      const goTo = useCallback((idx) => {
+        setCurrent((idx + total) % total);
+      }, [total]);
+
+      const resetTimer = useCallback(() => {
+        clearInterval(timerRef.current);
+        timerRef.current = setInterval(() => setCurrent(c => (c+1) % total), 4500);
+      }, [total]);
+
+      useEffect(() => {
+        timerRef.current = setInterval(() => setCurrent(c => (c+1) % total), 4500);
+        return () => clearInterval(timerRef.current);
+      }, [total]);
+
+      const handleNav = (dir) => { goTo(current + dir); resetTimer(); };
+
+      return (
+        <section className="gallery-section" aria-label="Galería de productos Desde mi cocina">
+          <div className="gallery-header">
+            <div className="section-label">— Nuestra producción</div>
+            <h2 className="section-title">Galería artesanal</h2>
+            <p className="section-sub">Cada imagen cuenta la historia de lo que hacemos con amor cada día.</p>
+          </div>
+          <div className="gallery-track-outer">
+            <div className="gallery-track" style={{transform:`translateX(-${current*100}%)`}}>
+              {GALLERY_SLIDES.map((slide, i) => (
+                <div className="gallery-slide" key={i} aria-hidden={i !== current}>
+                  <img src={slide.img} alt={slide.title} loading={i===0?"eager":"lazy"} />
+                  <div className="gallery-slide-caption">
+                    <h3>{slide.title}</h3>
+                    <p>{slide.desc}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+            <button className="gallery-btn prev" onClick={() => handleNav(-1)} aria-label="Imagen anterior">‹</button>
+            <button className="gallery-btn next" onClick={() => handleNav(1)} aria-label="Imagen siguiente">›</button>
+          </div>
+          <div className="gallery-dots" role="tablist" aria-label="Seleccionar imagen">
+            {GALLERY_SLIDES.map((_, i) => (
+              <button key={i} className={`gallery-dot${i===current?" active":""}`}
+                onClick={() => { goTo(i); resetTimer(); }}
+                role="tab" aria-selected={i===current} aria-label={`Imagen ${i+1} de ${total}`} />
+            ))}
+          </div>
+        </section>
+      );
+    });
+
+    // ===== PRODUCT POPUP =====
+    const ProductPopup = ({ product, onClose }) => {
+      const { addItem } = useCart();
+      const allImgs = [product.img, ...(product.extraImgs || [])];
+      const [imgIdx, setImgIdx] = useState(0);
+
+      useEffect(() => {
+        const handleKey = (e) => {
+          if (e.key === "Escape") onClose();
+          if (e.key === "ArrowLeft") setImgIdx(i => (i - 1 + allImgs.length) % allImgs.length);
+          if (e.key === "ArrowRight") setImgIdx(i => (i + 1) % allImgs.length);
+        };
+        document.addEventListener("keydown", handleKey);
+        return () => document.removeEventListener("keydown", handleKey);
+      }, [onClose, allImgs.length]);
+
+      const handleAdd = () => {
+        addItem(product);
+        onClose();
+      };
+
+      return (
+        <div className="popup-overlay" role="dialog" aria-modal="true" aria-label={`Detalle: ${product.name}`}
+          onClick={e => e.target === e.currentTarget && onClose()}>
+          <div className="popup-modal">
+            {/* Gallery */}
+            <div className="popup-gallery">
+              <div className="popup-gallery-track" style={{transform:`translateX(-${imgIdx*100}%)`}}>
+                {allImgs.map((src,i) => (
+                  <div className="popup-gallery-slide" key={i}>
+                    <img src={src} alt={`${product.name} — vista ${i+1}`} loading={i===0?"eager":"lazy"} />
+                  </div>
+                ))}
+              </div>
+              {allImgs.length > 1 && (
+                <>
+                  <button className="popup-gallery-btn prev"
+                    onClick={() => setImgIdx(i => (i-1+allImgs.length)%allImgs.length)}
+                    aria-label="Imagen anterior">‹</button>
+                  <button className="popup-gallery-btn next"
+                    onClick={() => setImgIdx(i => (i+1)%allImgs.length)}
+                    aria-label="Imagen siguiente">›</button>
+                  <div className="popup-dots">
+                    {allImgs.map((_,i) => (
+                      <button key={i} className={`popup-dot${i===imgIdx?" active":""}`}
+                        onClick={() => setImgIdx(i)} aria-label={`Ver imagen ${i+1}`} />
+                    ))}
+                  </div>
+                </>
+              )}
+              <button className="popup-close-top" onClick={onClose} aria-label="Cerrar">✕</button>
+            </div>
+            {/* Thumbnails */}
+            {allImgs.length > 1 && (
+              <div className="popup-thumb-strip" aria-label="Miniaturas">
+                {allImgs.map((src,i) => (
+                  <img key={i} src={src} alt={`Vista ${i+1}`}
+                    className={`popup-thumb${i===imgIdx?" active":""}`}
+                    onClick={() => setImgIdx(i)} loading="lazy" />
+                ))}
+              </div>
+            )}
+            {/* Info */}
+            <div className="popup-body">
+              <span className="popup-cat-badge">{product.category}</span>
+              <div className="popup-header-row">
+                <h2 className="popup-name">{product.name}</h2>
+                <span className="popup-price">${product.price.toLocaleString('es-AR')}</span>
+              </div>
+              <p className="popup-desc">{product.desc}</p>
+              <div className="popup-actions">
+                <button className="popup-add-btn" onClick={handleAdd}>
+                  <span>+ Agregar al carrito</span>
+                </button>
+                <button className="popup-close-btn" onClick={onClose}>Volver</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      );
+    };
+
+    // ===== NAVBAR =====
+    const Navbar = memo(({ page, setPage, onCartOpen }) => {
+      const { count } = useCart();
+      return (
+        <nav role="banner">
+          <a className="nav-logo" href="#home" onClick={e => { e.preventDefault(); setPage("home"); }}>
+            GRA<span>CHU</span>
+          </a>
+          <div className="nav-links" role="navigation" aria-label="Navegación principal">
+            {[["home","Inicio"],["products","Productos"]].map(([key,label]) => (
+              <button key={key} className={`nav-link${page===key?" active":""}`}
+                onClick={() => setPage(key)} aria-current={page===key?"page":undefined}>
+                {label}
+              </button>
+            ))}
+            <button className="cart-btn" onClick={onCartOpen} aria-label={`Carrito, ${count} productos`}>
+              <CartIcon />
+              Carrito
+              {count > 0 && <span className="cart-badge" aria-hidden="true">{count}</span>}
+            </button>
+          </div>
+        </nav>
+      );
+    });
+
+    // ===== HERO =====
+    const Hero = memo(({ onShopClick }) => (
+      <section className="hero" style={{padding:0, maxWidth:"none", margin:0}} aria-label="Presentación Desde mi cocina">
+        <div className="hero-bg" role="img" aria-label="Pan artesanal recién horneado" />
+        <div className="hero-overlay" />
+        <div className="hero-content">
+          <span className="hero-badge">🏡 Emprendimiento familiar</span>
+          <h1 className="hero-title">
+            Hecho en casa,<br/><em>con amor</em>
+          </h1>
+          <p className="hero-sub">
+            Panes artesanales, alfajores de chocolate, galletitas caseras y tortas que huelen a hogar. Pedí directamente por WhatsApp 💬
+          </p>
+          <button className="hero-cta" onClick={onShopClick} aria-label="Ver productos">
+            <span>Ver productos</span>
+            <span aria-hidden="true">→</span>
+          </button>
+          <div className="hero-features" aria-label="Características del emprendimiento">
+            {[["🏠","Retiro en puerta"],["🚚","Envíos cercanos"],["❤️","Hecho a mano"],["🌿","Sin conservantes"]].map(([icon,text]) => (
+              <div className="hero-feat" key={text}>
+                <div className="hero-feat-icon" aria-hidden="true">{icon}</div>
+                <span>{text}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+        <div className="hero-scroll-photos" aria-hidden="true">
+          {[
+            "https://images.unsplash.com/photo-1558961363-fa8fdf82db35?w=200&q=70",
+            "https://images.unsplash.com/photo-1499636136210-6f4ee915583e?w=200&q=70",
+            "https://images.unsplash.com/photo-1565958011703-44f9829ba187?w=200&q=70",
+          ].map((src,i) => (
+            <img key={i} src={src} alt="" className="hero-mini-img" loading="lazy" />
+          ))}
+        </div>
+      </section>
+    ));
+
+    // ===== PRODUCTS PAGE =====
+    const ProductCard = memo(({ product, onOpenPopup }) => {
+      const { addItem } = useCart();
+      const [added, setAdded] = useState(false);
+      const handleAdd = (e) => {
+        e.stopPropagation();
+        addItem(product);
+        setAdded(true);
+        setTimeout(() => setAdded(false), 900);
+      };
+      return (
+        <article className="product-card" aria-label={product.name}
+          onClick={() => onOpenPopup(product)}
+          tabIndex={0} onKeyDown={e => e.key==="Enter" && onOpenPopup(product)}
+          role="button">
+          <div className="product-img-wrap">
+            <img className="product-img" src={product.img} alt={product.name} loading="lazy" />
+            <span className="product-tag">{product.category}</span>
+            {/* Eye hint */}
+            <div style={{
+              position:"absolute", top:"50%", left:"50%", transform:"translate(-50%,-50%)",
+              background:"rgba(253,246,236,0.88)", borderRadius:"50%", width:44, height:44,
+              display:"flex", alignItems:"center", justifyContent:"center",
+              opacity:0, transition:"opacity 0.25s", fontSize:"1.2rem",
+              pointerEvents:"none"
+            }} className="card-eye-hint" aria-hidden="true">👁</div>
+            {added && (
+              <div className="added-indicator" aria-hidden="true">
+                <div className="added-checkmark">✓</div>
+              </div>
+            )}
+          </div>
+          <div className="product-body">
+            <h3 className="product-name">{product.name}</h3>
+            <p className="product-desc">{product.desc}</p>
+            <div className="product-footer">
+              <span className="product-price" aria-label={`Precio: ${product.price.toLocaleString('es-AR')} pesos`}>
+                ${product.price.toLocaleString('es-AR')}
+              </span>
+              <button className="add-btn" onClick={handleAdd} aria-label={`Agregar ${product.name} al carrito`}>
+                <span>+</span> Agregar
+              </button>
+            </div>
+          </div>
+        </article>
+      );
+    });
+
+    const ProductsPage = memo(() => {
+      const [filter, setFilter] = useState("Todos");
+      const [popupProduct, setPopupProduct] = useState(null);
+      const categories = ["Todos", ...new Set(PRODUCTS.map(p => p.category))];
+      const shown = filter === "Todos" ? PRODUCTS : PRODUCTS.filter(p => p.category === filter);
+      return (
+        <>
+          <section id="products" aria-label="Nuestros productos">
+            <div className="section-label">— Lo que hacemos con amor</div>
+            <h2 className="section-title">Nuestros productos</h2>
+            <p style={{color:"var(--text-light)",fontSize:"0.88rem",marginBottom:"0.8rem"}}>
+              💡 Hacé clic en cualquier producto para ver más fotos
+            </p>
+            <div className="divider" aria-hidden="true" />
+            <div style={{display:"flex",gap:"0.5rem",flexWrap:"wrap",marginBottom:"2rem"}} role="group" aria-label="Filtrar por categoría">
+              {categories.map(cat => (
+                <button key={cat}
+                  className={`nav-link${filter===cat?" active":""}`}
+                  style={{background: filter===cat ? "var(--warm)" : "var(--white)", color: filter===cat ? "var(--brown)" : "var(--text-light)", border:"1px solid var(--warm)"}}
+                  onClick={() => setFilter(cat)}
+                  aria-pressed={filter===cat}>
+                  {cat}
+                </button>
+              ))}
+            </div>
+            <div className="products-grid" role="list" aria-live="polite">
+              {shown.map(p => <ProductCard key={p.id} product={p} onOpenPopup={setPopupProduct} />)}
+            </div>
+          </section>
+          {popupProduct && <ProductPopup product={popupProduct} onClose={() => setPopupProduct(null)} />}
+        </>
+      );
+    });
+
+    // ===== STORY SECTION =====
+    const StorySection = () => (
+      <section style={{background:"var(--beige)",borderRadius:"24px",padding:"4rem 3rem",margin:"2rem auto",maxWidth:"1100px"}} aria-label="Sobre Desde mi cocina">
+        <div className="story-grid">
+          <div>
+            <div className="section-label">— Nuestra historia</div>
+            <h2 className="section-title">De la cocina de casa a tu mesa</h2>
+            <div className="divider" />
+            <p style={{color:"var(--text)",lineHeight:1.8,marginBottom:"1rem"}}>
+              Desde mi cocina nació de las tardes de domingo amasando con la abuela. Lo que empezó como tradición familiar hoy llega a tu casa con el mismo amor y los mismos ingredientes de siempre: sin apuro, sin industriales.
+            </p>
+            <p style={{color:"var(--text-light)",lineHeight:1.8,marginBottom:"1.5rem",fontSize:"0.95rem"}}>
+              Cada pan, cada alfajor y cada galletita es único porque los hacemos de a uno. Por eso los pedidos se hacen con anticipación — la buena comida no se apura.
+            </p>
+            <div className="story-values">
+              {[
+                ["🌾","Solo ingredientes naturales","Sin conservantes ni aditivos"],
+                ["🔥","Horneado el mismo día","Siempre fresco para vos"],
+                ["📦","Envíos en barrios aledaños","O retirás en puerta"],
+              ].map(([icon,title,sub]) => (
+                <div className="story-val" key={title}>
+                  <div className="story-val-icon">{icon}</div>
+                  <div className="story-val-text">
+                    <strong>{title}</strong>
+                    <span>{sub}</span>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+          <div className="story-imgs" aria-hidden="true">
+            <img className="story-img" src="https://images.unsplash.com/photo-1486887396153-fa416526c108?w=400&q=75" alt="Manos amasando pan" loading="lazy" />
+            <img className="story-img offset" src="https://images.unsplash.com/photo-1558961363-fa8fdf82db35?w=400&q=75" alt="Alfajores de chocolate" loading="lazy" />
+            <img className="story-img" src="https://images.unsplash.com/photo-1499636136210-6f4ee915583e?w=400&q=75" alt="Galletitas caseras" loading="lazy" />
+            <img className="story-img offset" src="https://images.unsplash.com/photo-1565958011703-44f9829ba187?w=400&q=75" alt="Budín de limón" loading="lazy" />
+            <div className="story-badge">+2 años<br/>haciendo<br/>delicias ✨</div>
+          </div>
+        </div>
+      </section>
+    );
+
+    // ===== CART DRAWER =====
+    const CartDrawer = ({ onClose, onCheckout }) => {
+      const { items, updateQty, removeItem, total } = useCart();
+      return (
+        <>
+          <div className="cart-overlay" onClick={onClose} aria-hidden="true" />
+          <aside className="cart-drawer" role="dialog" aria-modal="true" aria-label="Carrito de compras">
+            <div className="cart-header">
+              <h2 className="cart-header-title">🛒 Tu carrito</h2>
+              <button className="close-btn" onClick={onClose} aria-label="Cerrar carrito">✕</button>
+            </div>
+            <div className="cart-items" role="list">
+              {items.length === 0 ? (
+                <div className="cart-empty" aria-live="polite">
+                  <div className="cart-empty-icon">🧁</div>
+                  <p className="cart-empty-text">Tu carrito está vacío.<br/>¡Agregá algo rico!</p>
+                </div>
+              ) : items.map(item => (
+                <div className="cart-item" key={item.id} role="listitem">
+                  <img className="cart-item-img" src={item.img} alt={item.name} loading="lazy" />
+                  <div className="cart-item-info">
+                    <div className="cart-item-name">{item.name}</div>
+                    <div className="cart-item-price">${(item.price * item.qty).toLocaleString('es-AR')}</div>
+                  </div>
+                  <div className="qty-control" aria-label={`Cantidad: ${item.qty}`}>
+                    <button className="qty-btn" onClick={() => updateQty(item.id, -1)} aria-label="Reducir cantidad">−</button>
+                    <span className="qty-num" aria-live="polite">{item.qty}</span>
+                    <button className="qty-btn" onClick={() => updateQty(item.id, 1)} aria-label="Aumentar cantidad">+</button>
+                  </div>
+                  <button className="remove-btn" onClick={() => removeItem(item.id)} aria-label={`Eliminar ${item.name}`}>✕</button>
+                </div>
+              ))}
+            </div>
+            <div className="cart-footer">
+              <div className="cart-total-row">
+                <span className="cart-total-label">Total</span>
+                <span className="cart-total-amount" aria-live="polite">${total.toLocaleString('es-AR')}</span>
+              </div>
+              <button className="checkout-btn" onClick={onCheckout} disabled={items.length === 0}
+                aria-label="Proceder al checkout">
+                Hacer pedido 🎉
+              </button>
+            </div>
+          </aside>
+        </>
+      );
+    };
+
+    // ===== CHECKOUT MODAL =====
+    function buildWhatsAppMsg(items, total, form) {
+      const lines = items.map(i => `  • ${i.name} x${i.qty} — $${(i.price*i.qty).toLocaleString('es-AR')}`).join('\n');
+      const delivery = form.delivery === "retiro" ? "Retiro en puerta" : `Envío a: ${form.address}`;
+      const msg = `🧁 *Nuevo pedido Desde mi cocina*\n\n` +
+        `*Cliente:* ${form.name}\n` +
+        `*Teléfono:* ${form.phone}\n` +
+        `*Entrega:* ${delivery}\n\n` +
+        `*Productos:*\n${lines}\n\n` +
+        `*TOTAL: $${total.toLocaleString('es-AR')}*\n\n` +
+        (form.notes ? `*Aclaraciones:* ${form.notes}\n\n` : '') +
+        `¡Muchas gracias! 🙌`;
+      return msg;
+    }
+
+    const CheckoutModal = ({ onClose }) => {
+      const { items, total, clearCart } = useCart();
+      const [form, setForm] = useState({ name:"", phone:"", address:"", delivery:"retiro", notes:"" });
+      const [errors, setErrors] = useState({});
+
+      const validate = () => {
+        const e = {};
+        if (!form.name.trim()) e.name = "Ingresá tu nombre";
+        if (!form.phone.trim() || !/^\+?[\d\s\-]{6,}$/.test(form.phone)) e.phone = "Teléfono inválido";
+        if (form.delivery === "envio" && !form.address.trim()) e.address = "Ingresá la dirección de entrega";
+        setErrors(e);
+        return Object.keys(e).length === 0;
+      };
+
+      const handleSend = () => {
+        if (!validate()) return;
+        const msg = buildWhatsAppMsg(items, total, form);
+        const url = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(msg)}`;
+        window.open(url, "_blank", "noopener,noreferrer");
+        clearCart();
+        onClose();
+      };
+
+      const set = (k) => (e) => {
+        setForm(f => ({ ...f, [k]: e.target.value }));
+        if (errors[k]) setErrors(er => ({ ...er, [k]: undefined }));
+      };
+
+      return (
+        <div className="modal-overlay" role="dialog" aria-modal="true" aria-label="Formulario de pedido" onClick={e => e.target===e.currentTarget && onClose()}>
+          <div className="modal">
+            <div className="modal-header">
+              <h2 className="modal-title">Finalizar pedido</h2>
+              <button className="close-btn" onClick={onClose} aria-label="Cerrar">✕</button>
+            </div>
+            <div className="modal-body">
+              <div className="order-summary" aria-label="Resumen del pedido">
+                <div className="order-summary-title">Tu pedido</div>
+                {items.map(i => (
+                  <div className="order-sum-row" key={i.id}>
+                    <span>{i.name} x{i.qty}</span>
+                    <span>${(i.price*i.qty).toLocaleString('es-AR')}</span>
+                  </div>
+                ))}
+                <div className="order-sum-row order-sum-total">
+                  <span>Total</span>
+                  <span>${total.toLocaleString('es-AR')}</span>
+                </div>
+              </div>
+
+              <div className="form-group">
+                <label className="form-label" htmlFor="chk-name">Nombre <span aria-hidden="true">*</span></label>
+                <input id="chk-name" className="form-input" type="text" placeholder="Tu nombre completo"
+                  value={form.name} onChange={set("name")} aria-required="true"
+                  aria-invalid={!!errors.name} aria-describedby={errors.name?"err-name":undefined} />
+                {errors.name && <span id="err-name" style={{color:"#e05c3a",fontSize:"0.78rem"}} role="alert">{errors.name}</span>}
+              </div>
+
+              <div className="form-group">
+                <label className="form-label" htmlFor="chk-phone">Teléfono / WhatsApp <span aria-hidden="true">*</span></label>
+                <input id="chk-phone" className="form-input" type="tel" placeholder="Ej: 011 1234-5678"
+                  value={form.phone} onChange={set("phone")} aria-required="true"
+                  aria-invalid={!!errors.phone} aria-describedby={errors.phone?"err-phone":undefined} />
+                {errors.phone && <span id="err-phone" style={{color:"#e05c3a",fontSize:"0.78rem"}} role="alert">{errors.phone}</span>}
+              </div>
+
+              <div className="form-group">
+                <label className="form-label">Tipo de entrega <span aria-hidden="true">*</span></label>
+                <div className="delivery-options" role="radiogroup" aria-label="Seleccionar tipo de entrega">
+                  <div className={`delivery-option${form.delivery==="retiro"?" selected":""}`}
+                    onClick={() => setForm(f=>({...f,delivery:"retiro"}))} role="radio"
+                    aria-checked={form.delivery==="retiro"} tabIndex={0}
+                    onKeyDown={e => e.key===" " && setForm(f=>({...f,delivery:"retiro"}))}>
+                    <div className="delivery-option-icon">🏠</div>
+                    <div className="delivery-option-label">Retiro en puerta</div>
+                    <div className="delivery-option-desc">Te avisamos cuando está listo</div>
+                  </div>
+                  <div className={`delivery-option${form.delivery==="envio"?" selected":""}`}
+                    onClick={() => setForm(f=>({...f,delivery:"envio"}))} role="radio"
+                    aria-checked={form.delivery==="envio"} tabIndex={0}
+                    onKeyDown={e => e.key===" " && setForm(f=>({...f,delivery:"envio"}))}>
+                    <div className="delivery-option-icon">🚚</div>
+                    <div className="delivery-option-label">Envío a domicilio</div>
+                    <div className="delivery-option-desc">Barrios aledaños</div>
+                  </div>
+                </div>
+              </div>
+
+              {form.delivery === "envio" && (
+                <div className="form-group">
+                  <label className="form-label" htmlFor="chk-addr">Dirección de entrega <span aria-hidden="true">*</span></label>
+                  <input id="chk-addr" className="form-input" type="text" placeholder="Calle, altura, barrio"
+                    value={form.address} onChange={set("address")} aria-required="true"
+                    aria-invalid={!!errors.address} aria-describedby={errors.address?"err-addr":undefined} />
+                  {errors.address && <span id="err-addr" style={{color:"#e05c3a",fontSize:"0.78rem"}} role="alert">{errors.address}</span>}
+                </div>
+              )}
+
+              <div className="form-group">
+                <label className="form-label" htmlFor="chk-notes">Aclaraciones (opcional)</label>
+                <textarea id="chk-notes" className="form-textarea" placeholder="Alergias, preferencias, horario..."
+                  value={form.notes} onChange={set("notes")} />
+              </div>
+
+              <p className="required-note" aria-hidden="true">* Campos obligatorios</p>
+
+              <div style={{height:"1rem"}} />
+              <button className="whatsapp-btn" onClick={handleSend} disabled={items.length===0}
+                aria-label="Enviar pedido por WhatsApp">
+                <WhatsAppIcon />
+                Enviar pedido por WhatsApp
+              </button>
+              <p style={{fontSize:"0.78rem",color:"var(--text-light)",textAlign:"center",marginTop:"0.6rem"}}>
+                Se abrirá WhatsApp con tu pedido listo para enviar 📲
+              </p>
+            </div>
+          </div>
+        </div>
+      );
+    };
+
+    // ===== TOASTS =====
+    const Toasts = () => {
+      const { toasts } = useCart();
+      return (
+        <div className="toast-container" role="region" aria-label="Notificaciones" aria-live="polite">
+          {toasts.map(t => (
+            <div className="toast" key={t.id} role="status">{t.msg}</div>
+          ))}
+        </div>
+      );
+    };
+
+    // ===== FOOTER =====
+    const Footer = ({ setPage }) => (
+      <footer role="contentinfo">
+        <div className="footer-logo">Desde mi cocina 🧁</div>
+        <p className="footer-tagline">Hecho en casa, con amor — desde el primer horneado</p>
+        <nav className="footer-links" aria-label="Navegación pie de página">
+          <button className="footer-link" onClick={() => setPage("home")}>Inicio</button>
+          <button className="footer-link" onClick={() => setPage("products")}>Productos</button>
+          <a className="footer-link" href={`https://wa.me/${WHATSAPP_NUMBER}`} target="_blank" rel="noopener noreferrer">WhatsApp</a>
+        </nav>
+        <p className="footer-copy">© 2025 Desde mi cocina · Comida casera artesanal · Todos los derechos reservados</p>
+      </footer>
+    );
+
+    // ===== SVG ICONS =====
+    const CartIcon = () => (
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+        <circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/>
+        <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
+      </svg>
+    );
+    const WhatsAppIcon = () => (
+      <svg className="whatsapp-icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+        <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413z"/>
+      </svg>
+    );
+
+    // ===== APP =====
+    function App() {
+      const [page, setPage] = useState("home");
+      const [cartOpen, setCartOpen] = useState(false);
+      const [checkoutOpen, setCheckoutOpen] = useState(false);
+      const productsRef = useRef(null);
+
+      const handleShopClick = () => {
+        setPage("products");
+        setTimeout(() => window.scrollTo({ top: 0, behavior: "smooth" }), 50);
+      };
+
+      const handleCheckout = () => {
+        setCartOpen(false);
+        setTimeout(() => setCheckoutOpen(true), 200);
+      };
+
+      useEffect(() => {
+        if (cartOpen || checkoutOpen) {
+          document.body.style.overflow = "hidden";
+        } else {
+          document.body.style.overflow = "";
+        }
+        return () => { document.body.style.overflow = ""; };
+      }, [cartOpen, checkoutOpen]);
+
+      return (
+        <>
+          <a href="#main-content" className="sr-only" style={{position:"fixed",top:8,left:8,zIndex:9999,padding:"8px 12px",background:"var(--caramel)",color:"#fff",borderRadius:"6px",textDecoration:"none"}}>
+            Saltar al contenido principal
+          </a>
+          <Navbar page={page} setPage={setPage} onCartOpen={() => setCartOpen(true)} />
+          <main id="main-content">
+            {page === "home" && (
+              <>
+                <Hero onShopClick={handleShopClick} />
+                <GallerySlider />
+                <StorySection />
+              </>
+            )}
+            {page === "products" && <ProductsPage />}
+          </main>
+          <Footer setPage={setPage} />
+          {cartOpen && <CartDrawer onClose={() => setCartOpen(false)} onCheckout={handleCheckout} />}
+          {checkoutOpen && <CheckoutModal onClose={() => setCheckoutOpen(false)} />}
+          <Toasts />
+        </>
+      );
+    }
+
+    ReactDOM.createRoot(document.getElementById("root")).render(
+      <CartProvider><App /></CartProvider>
+    );
+  </script>
+</body>
+</html>
