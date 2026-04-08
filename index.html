@@ -631,66 +631,66 @@
     const { useState, useEffect, useCallback, createContext, useContext, useRef, memo } = React;
 
     // ===== TYPES & DATA =====
-    const GALLERY_BASE = "assets/public/gallery/";
+    const GALLERY_BASE = "./assets/public/gallery/";
 
-    const PRODUCTS = [
-      {
-        id: 1, name: "Pan de campo artesanal", category: "Panes",
-        desc: "Masas madre con fermentación lenta, corteza crujiente y miga suave. Horneado al horno de barro. Ingredientes 100% naturales, sin aditivos.",
-        price: 1800,
-        img: "https://images.unsplash.com/photo-1509440159596-0249088772ff?w=600&q=80",
-        extraImgs: [GALLERY_BASE+"prod_01_extra1.jpg", GALLERY_BASE+"prod_01_extra2.jpg"],
-      },
-      {
-        id: 2, name: "Alfajores de chocolate", category: "Alfajores",
-        desc: "Dos tapas de manteca, rellenos con dulce de leche casero y bañados en chocolate negro. Unidad o caja de 6.",
-        price: 350,
-        img: "https://images.unsplash.com/photo-1558961363-fa8fdf82db35?w=600&q=80",
-        extraImgs: [GALLERY_BASE+"prod_02_extra1.jpg", GALLERY_BASE+"prod_02_extra2.jpg"],
-      },
-      {
-        id: 3, name: "Galletitas de avena y miel", category: "Galletitas",
-        desc: "Con avena arrollada, miel de campo, nueces y toque de canela. Sin conservantes. Bolsa de 300g.",
-        price: 950,
-        img: "https://images.unsplash.com/photo-1499636136210-6f4ee915583e?w=600&q=80",
-        extraImgs: [GALLERY_BASE+"prod_03_extra1.jpg", GALLERY_BASE+"prod_03_extra2.jpg"],
-      },
-      {
-        id: 4, name: "Budín de limón y amapola", category: "Tortas",
-        desc: "Esponjoso, húmedo, con glaseado cítrico. Receta familiar transmitida de generación en generación. 8 porciones.",
-        price: 2200,
-        img: "https://images.unsplash.com/photo-1565958011703-44f9829ba187?w=600&q=80",
-        extraImgs: [GALLERY_BASE+"prod_04_extra1.jpg", GALLERY_BASE+"prod_04_extra2.jpg"],
-      },
-      {
-        id: 5, name: "Pan de miga integral", category: "Panes",
-        desc: "Harina integral de molino local, semillas de girasol, lino y chía. Ideal para el desayuno. Aproximadamente 700g.",
-        price: 1600,
-        img: "https://images.unsplash.com/photo-1586444248902-2f64eddc13df?w=600&q=80",
-        extraImgs: [GALLERY_BASE+"prod_05_extra1.jpg", GALLERY_BASE+"prod_05_extra2.jpg"],
-      },
-      {
-        id: 6, name: "Torta de zanahoria y nuez", category: "Tortas",
-        desc: "Húmeda, especiada con canela y nuez moscada, con frosting de queso crema casero. 10 porciones generosas.",
-        price: 2800,
-        img: "https://images.unsplash.com/photo-1621303837174-89787a7d4729?w=600&q=80",
-        extraImgs: [GALLERY_BASE+"prod_06_extra1.jpg", GALLERY_BASE+"prod_06_extra2.jpg"],
-      },
-      {
-        id: 7, name: "Caja de galletitas variadas", category: "Galletitas",
-        desc: "Surtido de 18 galletitas: manteca, vainilla, coco y chocolate. Presentación en cajita kraft. Regalo ideal.",
-        price: 1500,
-        img: "https://images.unsplash.com/photo-1481391319762-47dff72954d9?w=600&q=80",
-        extraImgs: [GALLERY_BASE+"prod_07_extra1.jpg", GALLERY_BASE+"prod_07_extra2.jpg"],
-      },
-      {
-        id: 8, name: "Alfajores de maicena x3", category: "Alfajores",
-        desc: "Clásicos mendocinos: masa de maicena que se deshace, dulce de leche artesanal y coco rallado. Pack de 3 unidades.",
-        price: 900,
-        img: "https://images.unsplash.com/photo-1517427294546-5aa121f68e8a?w=600&q=80",
-        extraImgs: [GALLERY_BASE+"prod_08_extra1.jpg", GALLERY_BASE+"prod_08_extra2.jpg"],
-      },
-    ];
+const PRODUCTS = [
+  {
+    id: 1, name: "Pan Integral", category: "Panes",
+    desc: "Harina integral de molino local, semillas de girasol, lino y chía. Ideal para el desayuno. Aproximadamente 700g.",
+    price: 5000,
+    img: GALLERY_BASE + "gallery_01_panes.jpg", 
+    extraImgs: [GALLERY_BASE + "gallery_04_panes.jpg", GALLERY_BASE + "gallery_05_panes_huevos.jpg", GALLERY_BASE + "gallery_06_panes_jamon.jpg"],
+  },
+  // { 
+  //   id: 2, name: "Alfajores de chocolate", category: "Alfajores",
+  //   desc: "Dos tapas de manteca, rellenos con dulce de leche casero y bañados en chocolate negro. Unidad o caja de 6.",
+  //   price: 350,
+  //   img: GALLERY_BASE + "alfajores_choc_principal.jpg",
+  //   extraImgs: [GALLERY_BASE + "prod_02_extra1.jpg", GALLERY_BASE + "prod_02_extra2.jpg"],
+  // },
+  {
+    id: 3, name: "Galletitas de avena y miel", category: "Galletitas",
+    desc: "Con avena, miel de campo, chips de chocolate y toque de canela. Sin conservantes. Bolsa de 350g.",
+    price: 4350,
+    img: GALLERY_BASE + "gallery_03_galletitas.jpg",
+    extraImgs: [GALLERY_BASE + "prod_03_extra1.jpg", GALLERY_BASE + "prod_03_extra2.jpg"],
+  },
+  {
+    id: 4, name: "Budín de limón y amapola", category: "Tortas",
+    desc: "Esponjoso, húmedo, con glaseado cítrico. Receta familiar transmitida de generación en generación. 8 porciones.",
+    price: 2200,
+    img: GALLERY_BASE + "budin_limon_principal.jpg",
+    extraImgs: [GALLERY_BASE + "prod_04_extra1.jpg", GALLERY_BASE + "prod_04_extra2.jpg"],
+  },
+  // {
+  //   id: 5, name: "Pan de miga integral", category: "Panes",
+  //   desc: "Harina integral de molino local, semillas de girasol, lino y chía. Ideal para el desayuno. Aproximadamente 700g.",
+  //   price: 1600,
+  //   img: GALLERY_BASE + "pan_miga_principal.jpg",
+  //   extraImgs: [GALLERY_BASE + "prod_05_extra1.jpg", GALLERY_BASE + "prod_05_extra2.jpg"],
+  // },
+  // {
+  //   id: 6, name: "Torta de zanahoria y nuez", category: "Tortas",
+  //   desc: "Húmeda, especiada con canela y nuez moscada, con frosting de queso crema casero. 10 porciones generosas.",
+  //   price: 2800,
+  //   img: GALLERY_BASE + "carrot_cake_principal.jpg",
+  //   extraImgs: [GALLERY_BASE + "prod_06_extra1.jpg", GALLERY_BASE + "prod_06_extra2.jpg"],
+  // },
+  // {
+  //   id: 7, name: "Caja de galletitas variadas", category: "Galletitas",
+  //   desc: "Surtido de 18 galletitas: manteca, vainilla, coco y chocolate. Presentación en cajita kraft. Regalo ideal.",
+  //   price: 1500,
+  //   img: GALLERY_BASE + "caja_galletas_principal.jpg",
+  //   extraImgs: [GALLERY_BASE + "prod_07_extra1.jpg", GALLERY_BASE + "prod_07_extra2.jpg"],
+  // },
+  // {
+  //   id: 8, name: "Alfajores de maicena x3", category: "Alfajores",
+  //   desc: "Clásicos mendocinos: masa de maicena que se deshace, dulce de leche artesanal y coco rallado. Pack de 3 unidades.",
+  //   price: 900,
+  //   img: GALLERY_BASE + "alfajores_maicena_principal.jpg",
+  //   extraImgs: [GALLERY_BASE + "prod_08_extra1.jpg", GALLERY_BASE + "prod_08_extra2.jpg"],
+  // },
+];
 
     const GALLERY_SLIDES = [
       // { img: GALLERY_BASE+"gallery_01_panes.jpg",    title: "Panes artesanales",         desc: "Fermentación lenta, ingredientes locales, horneados con amor." },
@@ -924,9 +924,58 @@
     });
 
     // ===== HERO =====
-    const Hero = memo(({ onShopClick }) => (
+    // const Hero = memo(({ onShopClick }) => (
+    //   <section className="hero" style={{padding:0, maxWidth:"none", margin:0}} aria-label="Presentación Desde mi cocina">
+    //     <div className="hero-bg" role="img" aria-label="Pan artesanal recién horneado" />
+    //     <div className="hero-overlay" />
+    //     <div className="hero-content">
+    //       <span className="hero-badge">🏡 Emprendimiento familiar</span>
+    //       <h1 className="hero-title">
+    //         Hecho en casa,<br/><em>con amor</em>
+    //       </h1>
+    //       <p className="hero-sub">
+    //         Panes artesanales, alfajores de chocolate, galletitas caseras y tortas que huelen a hogar.
+    //       </p>
+    //       <button className="hero-cta" onClick={onShopClick} aria-label="Ver productos">
+    //         <span>Ver productos</span>
+    //         <span aria-hidden="true">→</span>
+    //       </button>
+    //       <div className="hero-features" aria-label="Características del emprendimiento">
+    //         {[["🏠","Retiro en puerta"],["🚚","Envíos cercanos"],["❤️","Hecho a mano"],["🌿","Sin conservantes"]].map(([icon,text]) => (
+    //           <div className="hero-feat" key={text}>
+    //             <div className="hero-feat-icon" aria-hidden="true">{icon}</div>
+    //             <span>{text}</span>
+    //           </div>
+    //         ))}
+    //       </div>
+    //     </div>
+    //     <div className="hero-scroll-photos" aria-hidden="true">
+    //       {[
+    //         "https://images.unsplash.com/photo-1558961363-fa8fdf82db35?w=200&q=70",
+    //         "https://images.unsplash.com/photo-1499636136210-6f4ee915583e?w=200&q=70",
+    //         "https://images.unsplash.com/photo-1565958011703-44f9829ba187?w=200&q=70",
+    //       ].map((src,i) => (
+    //         <img key={i} src={src} alt="" className="hero-mini-img" loading="lazy" />
+    //       ))}
+    //     </div>
+    //   </section>
+    // ));
+const Hero = memo(({ onShopClick }) => {
+    // Definimos las rutas locales
+    const heroImages = [
+      "./assets/public/gallery/gallery_01_panes.jpg", // Cambia estos nombres por los reales
+      "./assets/public/gallery/gallery_01_panes.jpg",
+      "./assets/public/gallery/gallery_03_galletitas.jpg"
+    ];
+
+    return (
       <section className="hero" style={{padding:0, maxWidth:"none", margin:0}} aria-label="Presentación Desde mi cocina">
-        <div className="hero-bg" role="img" aria-label="Pan artesanal recién horneado" />
+        <div 
+          className="hero-bg" 
+          role="img" 
+          aria-label="Pan artesanal recién horneado"
+          style={{ backgroundImage: "url('./assets/public/gallery/gallery_01_panes.jpg')" }} 
+        />
         <div className="hero-overlay" />
         <div className="hero-content">
           <span className="hero-badge">🏡 Emprendimiento familiar</span>
@@ -934,12 +983,13 @@
             Hecho en casa,<br/><em>con amor</em>
           </h1>
           <p className="hero-sub">
-            Panes artesanales, alfajores de chocolate, galletitas caseras y tortas que huelen a hogar. Pedí directamente por WhatsApp 💬
+            Panes artesanales, alfajores de chocolate, galletitas caseras y tortas que huelen a hogar.
           </p>
           <button className="hero-cta" onClick={onShopClick} aria-label="Ver productos">
             <span>Ver productos</span>
             <span aria-hidden="true">→</span>
           </button>
+          
           <div className="hero-features" aria-label="Características del emprendimiento">
             {[["🏠","Retiro en puerta"],["🚚","Envíos cercanos"],["❤️","Hecho a mano"],["🌿","Sin conservantes"]].map(([icon,text]) => (
               <div className="hero-feat" key={text}>
@@ -950,17 +1000,20 @@
           </div>
         </div>
         <div className="hero-scroll-photos" aria-hidden="true">
-          {[
-            "https://images.unsplash.com/photo-1558961363-fa8fdf82db35?w=200&q=70",
-            "https://images.unsplash.com/photo-1499636136210-6f4ee915583e?w=200&q=70",
-            "https://images.unsplash.com/photo-1565958011703-44f9829ba187?w=200&q=70",
-          ].map((src,i) => (
-            <img key={i} src={src} alt="" className="hero-mini-img" loading="lazy" />
+          {heroImages.map((src, i) => (
+            <img 
+              key={i} 
+              src={src} 
+              alt="" 
+              className="hero-mini-img" 
+              loading="lazy" 
+              onError={(e) => { e.target.src = 'https://via.placeholder.com/200x200?text=Grachu'; }}
+            />
           ))}
         </div>
       </section>
-    ));
-
+    );
+  });
     // ===== PRODUCTS PAGE =====
     const ProductCard = memo(({ product, onOpenPopup }) => {
       const { addItem } = useCart();
@@ -1044,17 +1097,64 @@
     });
 
     // ===== STORY SECTION =====
-    const StorySection = () => (
-      <section style={{background:"var(--beige)",borderRadius:"24px",padding:"4rem 3rem",margin:"2rem auto",maxWidth:"1100px"}} aria-label="Sobre Desde mi cocina">
+    // const StorySection = () => (
+    //   <section style={{background:"var(--beige)",borderRadius:"24px",padding:"4rem 3rem",margin:"2rem auto",maxWidth:"1100px"}} aria-label="Sobre Desde mi cocina">
+    //     <div className="story-grid">
+    //       <div>
+    //         <div className="section-label">— Nuestra historia</div>
+    //         <h2 className="section-title">De la cocina de casa a tu mesa</h2>
+    //         <div className="divider" />
+    //         <p style={{color:"var(--text)",lineHeight:1.8,marginBottom:"1rem"}}>
+    //           Desde mi cocina nació de las tardes de domingo amasando con la abuela. Lo que empezó como tradición familiar hoy llega a tu casa con el mismo amor y los mismos ingredientes de siempre: sin apuro, sin industriales.
+    //         </p>
+    //         <p style={{color:"var(--text-light)",lineHeight:1.8,marginBottom:"1.5rem",fontSize:"0.95rem"}}>
+    //           Cada pan, cada alfajor y cada galletita es único porque los hacemos de a uno. Por eso los pedidos se hacen con anticipación — la buena comida no se apura.
+    //         </p>
+    //         <div className="story-values">
+    //           {[
+    //             ["🌾","Solo ingredientes naturales","Sin conservantes ni aditivos"],
+    //             ["🔥","Horneado el mismo día","Siempre fresco para vos"],
+    //             ["📦","Envíos en barrios aledaños","O retirás en puerta"],
+    //           ].map(([icon,title,sub]) => (
+    //             <div className="story-val" key={title}>
+    //               <div className="story-val-icon">{icon}</div>
+    //               <div className="story-val-text">
+    //                 <strong>{title}</strong>
+    //                 <span>{sub}</span>
+    //               </div>
+    //             </div>
+    //           ))}
+    //         </div>
+    //       </div>
+    //       <div className="story-imgs" aria-hidden="true">
+    //         <img className="story-img" src="https://images.unsplash.com/photo-1486887396153-fa416526c108?w=400&q=75" alt="Manos amasando pan" loading="lazy" />
+    //         <img className="story-img offset" src="https://images.unsplash.com/photo-1558961363-fa8fdf82db35?w=400&q=75" alt="Alfajores de chocolate" loading="lazy" />
+    //         <img className="story-img" src="https://images.unsplash.com/photo-1499636136210-6f4ee915583e?w=400&q=75" alt="Galletitas caseras" loading="lazy" />
+    //         <img className="story-img offset" src="https://images.unsplash.com/photo-1565958011703-44f9829ba187?w=400&q=75" alt="Budín de limón" loading="lazy" />
+    //         <div className="story-badge">+2 años<br/>haciendo<br/>delicias ✨</div>
+    //       </div>
+    //     </div>
+    //   </section>
+    // );
+const StorySection = () => {
+    const storyImages = [
+      "./assets/public/gallery/gallery_04_panes.jpg",   // Reemplaza con tus nombres reales
+      "./assets/public/gallery/galletitas.jpg",
+      "./assets/public/gallery/budin.jpg",
+      "./assets/public/gallery/gallery_03_galletitas.jpg"
+    ];
+
+    return (
+      <section style={{background:"var(--beige)", borderRadius:"24px", padding:"4rem 3rem", margin:"2rem auto", maxWidth:"1100px"}} aria-label="Sobre Desde mi cocina">
         <div className="story-grid">
           <div>
             <div className="section-label">— Nuestra historia</div>
             <h2 className="section-title">De la cocina de casa a tu mesa</h2>
             <div className="divider" />
-            <p style={{color:"var(--text)",lineHeight:1.8,marginBottom:"1rem"}}>
+            <p style={{color:"var(--text)", lineHeight:1.8, marginBottom:"1rem"}}>
               Desde mi cocina nació de las tardes de domingo amasando con la abuela. Lo que empezó como tradición familiar hoy llega a tu casa con el mismo amor y los mismos ingredientes de siempre: sin apuro, sin industriales.
             </p>
-            <p style={{color:"var(--text-light)",lineHeight:1.8,marginBottom:"1.5rem",fontSize:"0.95rem"}}>
+            <p style={{color:"var(--text-light)", lineHeight:1.8, marginBottom:"1.5rem", fontSize:"0.95rem"}}>
               Cada pan, cada alfajor y cada galletita es único porque los hacemos de a uno. Por eso los pedidos se hacen con anticipación — la buena comida no se apura.
             </p>
             <div className="story-values">
@@ -1073,17 +1173,24 @@
               ))}
             </div>
           </div>
+
           <div className="story-imgs" aria-hidden="true">
-            <img className="story-img" src="https://images.unsplash.com/photo-1486887396153-fa416526c108?w=400&q=75" alt="Manos amasando pan" loading="lazy" />
-            <img className="story-img offset" src="https://images.unsplash.com/photo-1558961363-fa8fdf82db35?w=400&q=75" alt="Alfajores de chocolate" loading="lazy" />
-            <img className="story-img" src="https://images.unsplash.com/photo-1499636136210-6f4ee915583e?w=400&q=75" alt="Galletitas caseras" loading="lazy" />
-            <img className="story-img offset" src="https://images.unsplash.com/photo-1565958011703-44f9829ba187?w=400&q=75" alt="Budín de limón" loading="lazy" />
+            {storyImages.map((src, index) => (
+              <img 
+                key={index}
+                className={`story-img ${index % 2 !== 0 ? 'offset' : ''}`} 
+                src={src} 
+                alt="Foto de nuestra producción" 
+                loading="lazy" 
+                onError={(e) => { e.target.src = 'https://via.placeholder.com/400x400?text=Cocina'; }}
+              />
+            ))}
             <div className="story-badge">+2 años<br/>haciendo<br/>delicias ✨</div>
           </div>
         </div>
       </section>
     );
-
+  };
     // ===== CART DRAWER =====
     const CartDrawer = ({ onClose, onCheckout }) => {
       const { items, updateQty, removeItem, total } = useCart();
@@ -1283,14 +1390,14 @@
     // ===== FOOTER =====
     const Footer = ({ setPage }) => (
       <footer role="contentinfo">
-        <div className="footer-logo">Desde mi cocina 🧁</div>
+        <div className="footer-logo">Desde mi cocina.ar</div>
         <p className="footer-tagline">Hecho en casa, con amor — desde el primer horneado</p>
         <nav className="footer-links" aria-label="Navegación pie de página">
           <button className="footer-link" onClick={() => setPage("home")}>Inicio</button>
           <button className="footer-link" onClick={() => setPage("products")}>Productos</button>
           <a className="footer-link" href={`https://wa.me/${WHATSAPP_NUMBER}`} target="_blank" rel="noopener noreferrer">WhatsApp</a>
         </nav>
-        <p className="footer-copy">© 2025 Desde mi cocina · Comida casera artesanal · Todos los derechos reservados</p>
+        <p className="footer-copy">© 2026 Desde mi cocina · Comida casera artesanal · Todos los derechos reservados</p>
       </footer>
     );
 
